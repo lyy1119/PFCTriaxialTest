@@ -10,10 +10,29 @@ fish define xlength
     zlength = dimensions('z')
 end
 
-; record something
+; record length
 history fish @xlength
 history fish @ylength
 history fish @zlength
+
+[xlength0 = xlength]
+[ylength0 = ylength]
+[zlength0 = zlength]
+
+[xEpsilon = 0]
+[yEpsilon = 0]
+[zEpsilon = 0]
+
+fish define xEpsilon
+    xEpsilon = (xlength - xlength0)/xlength0
+    yEpsilon = (ylength - ylength0)/ylength0
+    zEpsilon = (zlength - zlength0)/zlength0
+end
+
+; record epsilon
+history fish @xEpsilon
+history fish @yEpsilon
+history fish @zEpsilon
 
 [xStress = 0]
 [yStress = 0]
