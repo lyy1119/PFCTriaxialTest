@@ -101,7 +101,7 @@ if __name__ == "__main__":
         
         read_model("Result/initial-state.sav")
         set('confiningPressure', pressure)
-        call_p3dat('PFC/inspection.p3dat')
+        
         log.info(f'Step 2, exert confining pressure{i}: {pressure} Pa.')
         s2 = task.start('exert confining pressure')
         call_p3dat(f"PFC/confining.p3dat")
@@ -110,6 +110,7 @@ if __name__ == "__main__":
         log.info(f"Finished Step 2, time cost: {task.cost_time(s2)}")
         
         log.info('step 3, exert z direction velocity.')
+        call_p3dat('PFC/inspection.p3dat')
         s3 = task.start('exert z velocity')
         call_p3dat("PFC/triaxialTest.p3dat")
         save_model(f"Result/triaxial{pressure}.sav")
