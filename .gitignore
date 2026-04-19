@@ -1,0 +1,14 @@
+# PFC related files
+*.his
+*.csv
+*.sav
+*.txt
+*.log
+*.backup
+
+# other common file
+*.tar
+*.zip
+
+# Python
+__pycache__
