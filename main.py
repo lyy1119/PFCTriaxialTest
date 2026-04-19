@@ -93,7 +93,7 @@ if __name__ == "__main__":
     log.info(f"Finished Step 1, time cost: {task.cost_time(s1)}")
     log.info(f"Clump numbers:{it.clump.count()}")
     
-    log.info("Run inspection program.")
+    log.info("Run confining and test circulation.")
     
     
     for i in range(1,3+1):
@@ -110,7 +110,7 @@ if __name__ == "__main__":
         log.info(f"Finished Step 2, time cost: {task.cost_time(s2)}")
         
         log.info('step 3, exert z direction velocity.')
-        call_p3dat('PFC/inspection.p3dat')
+        # call_p3dat('PFC/inspection.p3dat') file was called in triaxialTest.p3dat
         s3 = task.start('exert z velocity')
         call_p3dat("PFC/triaxialTest.p3dat")
         save_model(f"Result/triaxial{pressure}.sav")

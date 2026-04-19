@@ -1,4 +1,6 @@
 ; ===========================traxial test=========================
+program call 'PFC/inspection.p3dat'
+
 
 model calm ; stable all clumps
 [servos('x') = true]
@@ -10,6 +12,16 @@ model calm ; stable all clumps
 [wall.vel.z(walls('up'))   = -rate*zlength]
 [wall.vel.z(walls('down')) =  rate*zlength]
 
-; history purge
-model cycle 800000
+[stop_judgement = 0]
+fish define stop_judgement
+    if zEpsilon >= 0.20 then ; variable zEpsilon relay on 'inspection.p3dat'
+        stop_judgement = 1
+    else
+        stop_judgement = 0
+    endif
+end
+
+; should call inspection first
+model solve fish-halt @stop_judgement
+; model cycle 800000
 ; ==============================================
