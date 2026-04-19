@@ -3,7 +3,7 @@
 # Description : PFC Triaxial Test Simulation.
 #               Python Controll Code.
 # DateTime    : 2026-04-10
-# Language    : Python
+# Language    : Python(PFC6.0 embedded)
 # Email       : me@lycarus.cn
 # --------------------------------------------
 
