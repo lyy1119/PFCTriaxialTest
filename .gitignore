@@ -5,6 +5,7 @@
 *.txt
 *.log
 *.backup
+*.temp
 
 # other common file
 *.tar
