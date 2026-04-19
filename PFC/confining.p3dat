@@ -1,0 +1,68 @@
+; ======================== confining ========================
+
+[gains = compute_gain(walls, servoFac)] ; initial gains
+[counter = 0]
+[gainInterval = 10]
+
+[targetStress      = map()]
+[targetStress('x') = confiningPressure]
+[targetStress('y') = confiningPressure]
+[targetStress('z') = confiningPressure] 
+
+[servos      = map()]
+[servos('x') = true]
+[servos('y') = true]
+[servos('z') = true]
+
+[tolerance = 0.05]
+; load all faces' stress to sigma_3
+fish define servo_function
+    ; update gain
+    if counter == 0 then
+        gains = compute_gain(walls, servoFac)
+        counter = gainInterval ; reset counter
+    else
+        counter -= 1
+    endif
+
+    servo_walls_velocity(walls, servos, gains, targetStress)
+end
+
+[axises    = array.create(3)]
+[axises(1) = 'x']
+[axises(2) = 'y']
+[axises(3) = 'z']
+
+[stop_judgement = 0]
+[targetStress('x')]
+[targetStress('y')]
+[targetStress('z')]
+fish define stop_judgement
+    
+    wallStress = get_wall_stress(walls)
+
+    loop local i (1, 3)
+        local axis = axises(i)
+        local current = wallStress(axis)
+        local target  = targetStress(axis) 
+        if servos(axis) == true then
+            if math.abs((current - target)/target) >= tolerance then
+                stop_judgement = 0 ; current axis not reach target stress
+                exit
+            endif
+        ;else ; not servo
+        endif
+    endloop
+    
+    if mech.solve("ratio-average") > 1e-5 then
+        stop_judgement = 0
+        exit
+    endif
+    stop_judgement = 1
+end
+
+; step 1, confining
+fish callback add servo_function 1.0
+
+model solve fish-halt @stop_judgement
+; =================================================================

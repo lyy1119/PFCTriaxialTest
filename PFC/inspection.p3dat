@@ -1,0 +1,35 @@
+[xlength = 0]
+[ylength = 0]
+[zlength = 0]
+fish define xlength
+    local dimensions = get_vessel_dimensions(walls)
+    xlength = dimensions('x')
+    ylength = dimensions('y')
+    zlength = dimensions('z')
+end
+
+; record something
+history fish @xlength
+history fish @ylength
+history fish @zlength
+
+[xStress = 0]
+[yStress = 0]
+[zStress = 0]
+fish define xStress
+    local stress = get_wall_stress(walls)
+    xStress = stress('x')
+    yStress = stress('y')
+    zStress = stress('z')
+end
+
+history fish @xStress
+history fish @yStress
+history fish @zStress ; [stress('z')] is this ok?
+
+[aratio = 0]
+fish define aratio
+    aratio = mech.solve("ratio-average")
+end
+
+history fish @aratio

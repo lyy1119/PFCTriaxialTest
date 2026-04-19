@@ -1,0 +1,16 @@
+; ===========================traxial test=========================
+
+history purge
+model calm ; stable all clumps
+[servos('x') = true]
+[servos('y') = true]
+[servos('z') = false]
+
+[rate = 1e-3]
+
+[wall.vel.z(walls('up'))   = -rate*zlength]
+[wall.vel.z(walls('down')) =  rate*zlength]
+
+; history purge
+model cycle 800000
+; ==============================================

@@ -1,0 +1,93 @@
+; ---------------- servo.fis -----------------
+; Author      : Lin Yiyang
+; Description : FISH lib for Triaxial Test
+;               Servo Control.
+; DateTime    : 2026-04-10
+; Language    : FISH
+; Email       : me@lycarus.cn
+; Compiler    : PFC6.0
+; --------------------------------------------
+
+
+; =====================================servo functions=====================================
+; compute gain factor
+; used to control the velocity of a wall
+define compute_gain(walls, fac)
+    ; result = {'x': vx, 'y': vy, 'z': vz} 
+    result = map()
+    wallStress = get_wall_stress(walls)
+    
+    local kn = map()
+    kn('x') = 0.0
+    kn('y') = 0.0
+    kn('z') = 0.0
+    
+    wallKeys = map.keys(walls)
+    loop local i (1, map.size(walls))
+        accu = '' ; accumulation manipulation signal
+        local key = wallKeys(i)
+        if key == 'front' | key == 'back' then
+            accu = 'x'
+        else if key == 'right' | key == 'left' then
+            accu = 'y'
+        else if key == 'down' | key == 'up' then
+            accu = 'z'
+        else
+            system.error = 'error variable key.'
+        endif
+       
+        local w = walls(key)
+        if wall.contactnum(w) == 0 then
+            system.error = 'contact number is 0.'
+        else
+            loop foreach contact wall.contactmap(w)
+                kn(accu) = kn(accu) + contact.prop(contact, 'kn')
+            endloop
+        endif
+    endloop
+   
+    local cord = array.create(3)
+    cord(1) = 'x'
+    cord(2) = 'y'
+    cord(3) = 'z'
+    
+    
+    loop i (1, 3)
+        key = cord(i)
+        result(key) = fac*(2.0)*areas(key)/(kn(key)*global.timestep)
+    endloop
+    
+    compute_gain = result ; return value
+end
+
+define servo_walls_velocity(walls, servos, gains, targetStress)
+    ; walls  = {'x': ..., 'y': ..., 'z': ...}
+    ; servos = {'x': true/false, 'y': ..., 'z': ...} servo control
+    ; gains  = {'x': ..., 'y': ..., 'z': ...} (value of gian)
+    ; targetStress  = {'x': 1.1, 'y': 1.2, 'z': 1.3}
+    local wallStress  = get_wall_stress(walls)
+
+    local servoKeys = map.keys(servos)
+    loop local i (1, map.size(servos))
+        local key   = servoKeys(i)
+        local value = servos(key)
+        if value then ; servo in this direction
+            local vel = gains(key)*(targetStress(key) - wallStress(key))
+            if key == 'x' then
+                ; servo front & back wall
+                wall.vel.x(walls('front')) = -vel
+                wall.vel.x(walls('back'))  =  vel
+            else if key == 'y' then
+                ; servo left & right wall
+                wall.vel.y(walls('right')) = -vel
+                wall.vel.y(walls('left'))  =  vel
+            else if key == 'z' then
+                ; up front & down wall
+                wall.vel.z(walls('up'))    = -vel
+                wall.vel.z(walls('down'))  =  vel
+            endif
+        endif
+    endloop
+end
+
+; =========================================================================================
