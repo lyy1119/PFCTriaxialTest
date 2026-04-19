@@ -1,6 +1,5 @@
 ; ===========================traxial test=========================
 
-history purge
 model calm ; stable all clumps
 [servos('x') = true]
 [servos('y') = true]
