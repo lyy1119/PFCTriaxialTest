@@ -10,7 +10,7 @@ clump template create name 'particle'   ...
 
 [walls = init_wall]
 [extend_wall(walls, 2)]
-@init_clumps([domainSize*0.25], "particle", [porosity], [rMax], [rMin])
+@init_clumps([domainSize*0.25], "particle", [porosity], [dMax], [dMin])
 ; Activate gravity
 model gravity 0.0
 

@@ -21,8 +21,8 @@ def get_config(fileName: str):
         'balls'     : [float(config.get('clump', 'ball1')), float(config.get('clump', 'ball2'))],
         'distance'  : float(config.get('clump', 'distance')),
         'density'   : float(config.get('clump', 'density')),
-        'rMax'      : float(config.get('clump', 'maxSize')),
-        'rMin'      : float(config.get('clump', 'minSize')),
+        'dMax'      : float(config.get('clump', 'maxSize')),
+        'dMin'      : float(config.get('clump', 'minSize')),
         'clumpKn'   : float(config.get('clump', 'kn')),
         'clumpFric' : float(config.get('clump', 'fric')),
         # output

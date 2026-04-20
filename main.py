@@ -57,8 +57,8 @@ if __name__ == "__main__":
     set('distance', config['distance'])
     set('domainSize', config['wallSize'])
     set('porosity', config['porosity'])
-    set('rMax', config['rMax'])
-    set('rMin', config['rMin'])
+    set('dMax', config['dMax'])
+    set('dMin', config['dMin'])
     set('clumpKn', config['clumpKn'])
     set('clumpFric', config['clumpFric'])
 
