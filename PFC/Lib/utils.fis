@@ -19,7 +19,7 @@ define create_rect_wall(v1, v2, v3, v4)
     endif
 
     local current_id = next_wall_id
-    
+
     command
         wall generate id [current_id]       ...
             polygon                         ...
@@ -27,9 +27,9 @@ define create_rect_wall(v1, v2, v3, v4)
                 @v2(1,1) @v2(1,2) @v2(1,3)  ...
                 @v3(1,1) @v3(1,2) @v3(1,3)  ...
                 @v4(1,1) @v4(1,2) @v4(1,3)  ...
-                
+
     endcommand
-    
+
     next_wall_id = next_wall_id + 1 ; make sure wall id is unique
     current_wall = wall.find(current_id)
     create_rect_wall = current_wall ; function name itself is THE return value
@@ -37,35 +37,35 @@ end
 
 define vertices ; sorted by octant
     local a = domainSize/4.0
-    
+
     p1(1,1) =  a/2
     p1(1,2) =  a/2
     p1(1,3) =  a
-    
+
     p2(1,1) = -a/2
     p2(1,2) =  a/2
     p2(1,3) =  a
-    
+
     p3(1,1) = -a/2
     p3(1,2) = -a/2
     p3(1,3) =  a
-    
+
     p4(1,1) =  a/2
     p4(1,2) = -a/2
     p4(1,3) =  a
-    
+
     p5(1,1) =  a/2
     p5(1,2) =  a/2
     p5(1,3) = -a
-    
+
     p6(1,1) = -a/2
     p6(1,2) =  a/2
     p6(1,3) = -a
-    
+
     p7(1,1) = -a/2
     p7(1,2) = -a/2
     p7(1,3) = -a
-    
+
     p8(1,1) =  a/2
     p8(1,2) = -a/2
     p8(1,3) = -a
@@ -80,18 +80,18 @@ define init_wall
     p6 = array.create(1, 3)
     p7 = array.create(1, 3)
     p8 = array.create(1, 3)
-    
+
     vertices()
-    
+
     walls = map()
-    
+
     walls('front')  = create_rect_wall(p1, p5, p8, p4) ; point to (0, 0, 0)
     walls('back')   = create_rect_wall(p2, p3, p7, p6)
     walls('right')  = create_rect_wall(p1, p2, p6, p5)
     walls('left')   = create_rect_wall(p3, p4, p8, p7)
     walls('up')     = create_rect_wall(p4, p3, p2, p1)
     walls('down')   = create_rect_wall(p5, p6, p7, p8)
-    
+
     init_wall = walls
 end
 ; =========================================================================================
@@ -105,15 +105,15 @@ define init_clumps(extent, clumpName, porosity, rMax, rMin)
             size [rMin] [rMax]  ...
             template [clumpName] ...
             box [-extent/2.0+rMax] [extent/2.0-rMin] [-extent/2.0+rMax] [extent/2.0-rMin] [-extent+rMax] [extent-rMin]
-        
+
         clump attribute     ...
             damp 0.7        ...
-            density 2500    
-        
+            density 2500
+
         clump property      ...
             "kn"      [clumpKn] ...
             "fric"    [clumpFric]
-         
+
         wall property "fric" [wallFrci]
     endcommand
 end

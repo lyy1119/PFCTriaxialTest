@@ -27,7 +27,7 @@ define extend_wall(walls, fac)
             ; throw a error
             system.error = 'Fatal, Wrong wall name: ' + i
         endif
-        
+
         loop foreach local v wall.vertexlist(w)
             if scaleX then
                 w.vertex.pos.x(v) = fac*wall.vertex.pos.x(v)
@@ -48,7 +48,7 @@ define get_vessel_dimensions(walls)
     dimension('x') = wall.pos.x(walls('front')) - wall.pos.x(walls('back'))
     dimension('y') = wall.pos.y(walls('right')) - wall.pos.y(walls('left'))
     dimension('z') = wall.pos.z(walls('up'))    - wall.pos.z(walls('down'))
-    
+
     get_vessel_dimensions = dimension
 end
 
@@ -56,12 +56,12 @@ define get_wall_effetive_areas(walls)
 
     local dimensions  = get_vessel_dimensions(walls)
     areas = map()
-    
+
     ; count area
     areas('x') = dimensions('y')*dimensions('z')
     areas('y') = dimensions('x')*dimensions('z')
     areas('z') = dimensions('x')*dimensions('y')
-    
+
     get_wall_effetive_areas = areas
 
 end
@@ -69,30 +69,30 @@ end
 define get_wall_stress(walls)
     ; get wall pressure by drection, such as 'x', 'y', 'z'
     local areas = get_wall_effetive_areas(walls)
-    
+
     wallStress = map()
-    
+
     ; x
     ; notice, normal vector of a wall point to the origin point
     wallStress('x') = 0.5*(wall.force.contact.x(walls("front")) - wall.force.contact.x(walls("back")))/areas('x')
     wallStress('y') = 0.5*(wall.force.contact.y(walls("right")) - wall.force.contact.y(walls("left")))/areas('y')
     wallStress('z') = 0.5*(wall.force.contact.z(walls("up")) - wall.force.contact.z(walls("down")))/areas('z')
-    
+
     get_wall_stress = wallStress ; return value
 end
 ; =========================================================================================
 
 ; ====================================vessel functions=====================================
 define get_vessel_average_stress(walls)
-    ; walls = {'x': ..., 'y': ..., 'z': ...} 
+    ; walls = {'x': ..., 'y': ..., 'z': ...}
 
     local areas = get_wall_effetive_areas(walls)
-    
+
     stress = map()
     stress('x') = 0.0
     stress('y') = 0.0
     stress('z') = 0.0
-    
+
     loop foreach local contact contact.list("ball-ball")
         local contactForce = contact.force.global(contact)
         local v = clump.pos(contact.end2(contact)) - clump.pos(contact.end1(contact))
@@ -100,11 +100,11 @@ define get_vessel_average_stress(walls)
         stress('y') = stress('y') + comp.y(contactForce)*comp.y(v)
         stress('z') = stress('z') + comp.z(contactForce)*comp.z(v)
     endloop
-    
+
     stress('x') = stress('x') / areas('x')
     stress('y') = stress('y') / areas('y')
     stress('z') = stress('z') / areas('z')
-    
+
     get_vessel_average_stress = stress
 end
 ; =========================================================================================

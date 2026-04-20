@@ -13,15 +13,15 @@
 ; compute gain factor
 ; used to control the velocity of a wall
 define compute_gain(walls, fac)
-    ; result = {'x': vx, 'y': vy, 'z': vz} 
+    ; result = {'x': vx, 'y': vy, 'z': vz}
     result = map()
     wallStress = get_wall_stress(walls)
-    
+
     local kn = map()
     kn('x') = 0.0
     kn('y') = 0.0
     kn('z') = 0.0
-    
+
     wallKeys = map.keys(walls)
     loop local i (1, map.size(walls))
         accu = '' ; accumulation manipulation signal
@@ -35,7 +35,7 @@ define compute_gain(walls, fac)
         else
             system.error = 'error variable key.'
         endif
-       
+
         local w = walls(key)
         if wall.contactnum(w) == 0 then
             system.error = 'contact number is 0.'
@@ -45,18 +45,18 @@ define compute_gain(walls, fac)
             endloop
         endif
     endloop
-   
+
     local cord = array.create(3)
     cord(1) = 'x'
     cord(2) = 'y'
     cord(3) = 'z'
-    
-    
+
+
     loop i (1, 3)
         key = cord(i)
         result(key) = fac*(2.0)*areas(key)/(kn(key)*global.timestep)
     endloop
-    
+
     compute_gain = result ; return value
 end
 

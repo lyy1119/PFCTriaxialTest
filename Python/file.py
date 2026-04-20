@@ -8,14 +8,14 @@ run = it.command
 def get_config(fileName: str):
     '''
     read config from fileName
-    return { 
+    return {
         'balls' : [...],
-        'distance' : float    
+        'distance' : float
     }
     '''
     config = ini.ConfigParser()
     config.read(fileName, encoding='UTF-8')
-    
+
     return {
         # clump
         'balls'     : [float(config.get('clump', 'ball1')), float(config.get('clump', 'ball2'))],
@@ -30,7 +30,8 @@ def get_config(fileName: str):
         # pfc
         'random'    : config.get('pfc', 'randomSeed'),
         'porosity'  : float(config.get('pfc', 'initPorosity')),
-        'interval'  : int(config.get('pfc', 'historyInterval')),
+        'interval'  : float(config.get('pfc', 'recordEpsilonInterval')),
+        'loadRate'  : float(config.get('pfc', 'compressRate')),
         # wall settings
         'wallSize'  : float(config.get('wall', 'size')),
         'confiningPressure1' : float(config.get('wall', 'confiningPressure1')),
@@ -40,16 +41,16 @@ def get_config(fileName: str):
         # servo
         'servoFac'  : float(config.get('servo', 'fac')),
     }
-    
+
 def output_history(id: int, filename: str):
     # output a history to csv by id
     # a history data is versus by step
     if not filename.endswith('.csv'):
         filename += '.csv'
-    
+
     if os.path.exists(filename):
         os.remove(filename)
-    
+
     run(f"history export {id} file '{filename}'")
     # process file to a standardized csv file
     with open(filename, 'r') as fIn, open(f'{filename}.tmp', 'w') as fOut:
@@ -60,9 +61,9 @@ def output_history(id: int, filename: str):
                 lines = line.split()
                 newLine = ','.join(lines)
                 fOut.write(f"{newLine}\n")
-    
+
     os.replace(f'{filename}.tmp', filename)
-    
+
 if __name__ == "__main__":
     config = get_config("input.ini")
     print(config)

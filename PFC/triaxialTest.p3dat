@@ -1,20 +1,19 @@
 ; ===========================traxial test=========================
-program call 'PFC/inspection.p3dat'
+; [epsilonRate = ] ; set by python
 
+program call 'PFC/inspection.p3dat'
 
 model calm ; stable all clumps
 [servos('x') = true]
 [servos('y') = true]
 [servos('z') = false]
 
-[rate = 1e-3]
-
-[wall.vel.z(walls('up'))   = -rate*zlength]
-[wall.vel.z(walls('down')) =  rate*zlength]
+[wall.vel.z(walls('up'))   = -epsilonRate*zlength/2.0]
+[wall.vel.z(walls('down')) =  epsilonRate*zlength/2.0]
 
 [stop_judgement = 0]
 fish define stop_judgement
-    if zEpsilon >= 0.20 then ; variable zEpsilon relay on 'inspection.p3dat'
+    if zEpsilon <= -0.20 then ; variable zEpsilon relay on 'inspection.p3dat'
         stop_judgement = 1
     else
         stop_judgement = 0

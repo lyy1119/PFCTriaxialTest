@@ -32,7 +32,8 @@ inputFile   = 'input.ini'
 
 call_p3dat = lambda path: it.command(f"program call '{path}'")
 save_model = lambda file: it.command(f"model save '{file}'")
-read_model = lambda file: it.command(f"model restore '{file}'") 
+read_model = lambda file: it.command(f"model restore '{file}'")
+set_history_interval = lambda i: it.command(f"history interval {i}")
 set = it.fish.set
 
 if __name__ == "__main__":
@@ -47,44 +48,42 @@ if __name__ == "__main__":
     config = get_config(inputFile)
     logFile = config['logFile']
     log = Log(outputFile=logFile)
-    
+
     log.info(config)
-    
+
     # particle size
     set("ball1Radius", config['balls'][0])
-    set("ball2Radius", config['balls'][1]) 
-    set('distance', config['distance'])    
+    set("ball2Radius", config['balls'][1])
+    set('distance', config['distance'])
     set('domainSize', config['wallSize'])
     set('porosity', config['porosity'])
     set('rMax', config['rMax'])
     set('rMin', config['rMin'])
     set('clumpKn', config['clumpKn'])
     set('clumpFric', config['clumpFric'])
-    
+
     set('servoFac', config['servoFac'])
-    
+
     set('wallFric', config['wallFric'])
-    
+
     log.info("set seed.")
     it.command(f"model random {config['random']}")
-    
+
     log.info("load lib codes.")
     call_p3dat('PFC/Lib/utils.fis')
     call_p3dat('PFC/Lib/servo.fis')
-    
+
     log.info('Preprogress, Set domain.')
     it.command("model domain extent [-domainSize/2] [domainSize/2]")
     it.command("model domain condition destroy")
-    
+
     log.info('Preprogress, Set cmat.')
     it.command("contact cmat default model linear method deformability emod [1.0e9] kratio [2.0]")
-    
-    it.command(f"history interval {config['interval']}")
-    
+
     # ===============================================
 
     log.info("Start main PFC program.")
-    
+
     log.info("Step 1, generate particles")
     s1 = task.start('generate particles')
     call_p3dat("PFC/generate.p3dat")
@@ -92,23 +91,27 @@ if __name__ == "__main__":
     task.finish(s1)
     log.info(f"Finished Step 1, time cost: {task.cost_time(s1)}")
     log.info(f"Clump numbers:{it.clump.count()}")
-    
+
     log.info("Run confining and test circulation.")
-    
-    
+
+    # recalculate history interval
+    interval = int(config['interval']/(it.timestep()*config['loadRate']))
+    set('epsilonRate', config['loadRate'])
+    set_history_interval(interval)
+
     for i in range(1,3+1):
-        pressure = float(config[f'confiningPressure{i}'])      
-        
+        pressure = float(config[f'confiningPressure{i}'])
+
         read_model("Result/initial-state.sav")
         set('confiningPressure', pressure)
-        
+
         log.info(f'Step 2, exert confining pressure{i}: {pressure} Pa.')
         s2 = task.start('exert confining pressure')
         call_p3dat(f"PFC/confining.p3dat")
         save_model(f"Result/confining{pressure}.sav")
         task.finish(s2)
         log.info(f"Finished Step 2, time cost: {task.cost_time(s2)}")
-        
+
         log.info('step 3, exert z direction velocity.')
         # call_p3dat('PFC/inspection.p3dat') file was called in triaxialTest.p3dat
         s3 = task.start('exert z velocity')
@@ -116,11 +119,11 @@ if __name__ == "__main__":
         save_model(f"Result/triaxial{pressure}.sav")
         task.finish(s3)
         log.info(f'Finished Step 3, time cost: {task.cost_time(s3)}')
-        
+
     task.finish(taskid)
     log.info("Simulation finished.")
     log.info(task)
-    
+
     # ===============after-processing================
     # ===============================================
 

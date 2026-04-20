@@ -4,13 +4,13 @@ class StepTime():
     def __init__(self):
         self.timeList = []
         self.length = 0
-    
+
     def step_id_check(self, step: int):
         if step < 0:
             raise ValueError('Step id should larger than 0.')
         if step >= self.length:
             raise ValueError(f'Step id: {step} is not recorded. The max Step id is {self.length - 1}.')
-    
+
     def start(self, name='New Step'):
         t = {
             'start': datetime.now(),
@@ -20,21 +20,21 @@ class StepTime():
         self.timeList.append(t)
         self.length += 1
         return self.length - 1
-    
+
     def finish(self, step: int):
         self.step_id_check(step)
         self.timeList[step]['end'] = datetime.now()
-    
+
     def cost_time(self, step: int):
         self.step_id_check(step)
         t = self.timeList[step]
         if not 'end' in t.keys():
             raise NameError(f'Current Step({step}) not ended.')
         return t['end'] - t['start']
-        
+
     def __len__(self):
         return self.length
-        
+
     def __str__(self):
         string = []
         for i in self.timeList:

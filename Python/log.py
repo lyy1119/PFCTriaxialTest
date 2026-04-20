@@ -31,7 +31,7 @@ class Log:
             print(text)
         # else:
         #     pass
-        
+
         if self.file:
             with open(self.file, 'a+') as f:
                 f.write(text+'\n')
