@@ -95,15 +95,15 @@ if __name__ == "__main__":
 
     log.info("Run confining and test circulation.")
 
-    # recalculate history interval
-    interval = int(config['interval']/(it.timestep()*config['loadRate']))
-    set('epsilonRate', config['loadRate'])
-    set_history_interval(interval)
-
     for i in range(1,3+1):
+        read_model("Result/initial-state.sav")
+        # recalculate history interval
+        interval = int(config['interval']/(it.timestep()*config['loadRate']))
+        set('epsilonRate', config['loadRate'])
+        set_history_interval(interval)
+
         pressure = float(config[f'confiningPressure{i}'])
 
-        read_model("Result/initial-state.sav")
         set('confiningPressure', pressure)
 
         log.info(f'Step 2, exert confining pressure{i}: {pressure} Pa.')
