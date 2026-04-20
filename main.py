@@ -61,6 +61,7 @@ if __name__ == "__main__":
     set('dMin', config['dMin'])
     set('clumpKn', config['clumpKn'])
     set('clumpFric', config['clumpFric'])
+    set('density', config['density'])
 
     set('servoFac', config['servoFac'])
 
