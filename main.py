@@ -21,7 +21,7 @@ importlib.reload(Python.file)
 importlib.reload(Python.log)
 importlib.reload(Python.stepTimeRecord)
 
-from Python.file import get_config
+from Python.file import get_config, his_to_csv
 from Python.log import Log
 from Python.stepTimeRecord import StepTime
 # =========================================
@@ -121,6 +121,13 @@ if __name__ == "__main__":
         save_model(f"Result/triaxial{pressure}.sav")
         task.finish(s3)
         log.info(f'Finished Step 3, time cost: {task.cost_time(s3)}')
+
+        # output history
+        it.command(f"history export 9 vs 6 reverse file '{pressure}.his'") # export zStress vs zEpsilon
+        it.command(f"history export 10 file '{pressure}-aratio.his'")   # export aratio vs Step
+        # process his to standard csv
+        his_to_csv(f'{pressure}.his')
+        his_to_csv(f'{pressure}-aratio.his')
 
     task.finish(taskid)
     log.info("Simulation finished.")

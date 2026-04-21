@@ -65,6 +65,17 @@ def output_history(id: int, filename: str):
 
     os.replace(f'{filename}.tmp', filename)
 
+def his_to_csv(hisFile: str):
+    csvFile = hisFile.split('.his')[0] + '.csv'
+    with open(csvFile, 'w', encoding='UTF-8') as o:
+        with open(hisFile, 'r') as i:
+            for line in i:
+                if '---' in line: 
+                    continue # pass "---"" line
+                o.write(','.join(line.split()) + '\n')
+    os.remove(hisFile) # 删除原hisfile
+    os.rename(csvFile, f"Result/{csvFile}")
+
 if __name__ == "__main__":
     config = get_config("input.ini")
     print(config)
