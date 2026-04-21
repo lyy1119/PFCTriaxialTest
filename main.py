@@ -62,6 +62,7 @@ if __name__ == "__main__":
     set('clumpKn', config['clumpKn'])
     set('clumpFric', config['clumpFric'])
     set('density', config['density'])
+    set('maxAllowedStrain', config['maxStrain'])
 
     set('servoFac', config['servoFac'])
 

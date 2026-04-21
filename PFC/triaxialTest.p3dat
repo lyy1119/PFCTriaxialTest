@@ -12,9 +12,17 @@ model calm ; stable all clumps
 [wall.vel.z(walls('down')) =  epsilonRate*zlength/2.0]
 
 [stop_judgement = 0]
+
+[strainAtMax = zEpsilon] ; record strain where max stress appears
+[stressMax = zStress] ; depand on inspection.p3dat
 fish define stop_judgement
-    if zEpsilon <= -0.20 then ; variable zEpsilon relay on 'inspection.p3dat'
-        stop_judgement = 1
+    if zEpsilon <= -maxAllowedStrain then ; variable zEpsilon relay on 'inspection.p3dat'
+        stop_judgement = 1 ; exit condition 1, reach desinged max strain
+    else if zStress >= stressMax then
+        stressMax = zStress
+        strainAtMax = zEpsilon ; re-record max stress and strain, there, strain is a negative real number
+    else if (stressMax - zStress)/stressMax >= 0.1 & zEpsilon - strainAtMax > 4 then
+        stop_judgement = 1 ; exit condition 2, where there is a peak value in stress
     else
         stop_judgement = 0
     endif

@@ -32,6 +32,7 @@ def get_config(fileName: str):
         'porosity'  : float(config.get('pfc', 'initPorosity')),
         'interval'  : float(config.get('pfc', 'recordEpsilonInterval')),
         'loadRate'  : float(config.get('pfc', 'compressRate')),
+        'maxStrain'  : float(config.get('pfc', 'maxStrain')),
         # wall settings
         'wallSize'  : float(config.get('wall', 'size')),
         'confiningPressure1' : float(config.get('wall', 'confiningPressure1')),
