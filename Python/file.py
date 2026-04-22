@@ -34,11 +34,11 @@ def get_config(fileName: str):
         'loadRate'  : float(config.get('pfc', 'compressRate')),
         'maxStrain'  : float(config.get('pfc', 'maxStrain')),
         # wall settings
-        'wallSize'  : float(config.get('wall', 'size')),
+        'wallSize'           : float(config.get('wall', 'size')),
         'confiningPressure1' : float(config.get('wall', 'confiningPressure1')),
         'confiningPressure2' : float(config.get('wall', 'confiningPressure2')),
         'confiningPressure3' : float(config.get('wall', 'confiningPressure3')),
-        'wallFric'  : float(config.get('wall', 'fric')),
+        'ballWallFric'       : float(config.get('wall', 'fric')),
         # servo
         'servoFac'  : float(config.get('servo', 'fac')),
     }
@@ -73,7 +73,7 @@ def his_to_csv(hisFile: str):
                 if '---' in line: 
                     continue # pass "---"" line
                 o.write(','.join(line.split()) + '\n')
-    os.remove(hisFile) # 删除原hisfile
+    os.remove(hisFile) # remove hisfile
     os.rename(csvFile, f"Result/{csvFile}")
 
 if __name__ == "__main__":

@@ -63,10 +63,8 @@ if __name__ == "__main__":
     set('clumpFric', config['clumpFric'])
     set('density', config['density'])
     set('maxAllowedStrain', config['maxStrain'])
-
+    set('wallFric', config['ballWallFric'])
     set('servoFac', config['servoFac'])
-
-    set('wallFric', config['wallFric'])
 
     log.info("set seed.")
     it.command(f"model random {config['random']}")
