@@ -38,7 +38,9 @@ define compute_gain(walls, fac)
 
         local w = walls(key)
         if wall.contactnum(w) == 0 then
-            system.error = 'contact number is 0.'
+            ; system.error = 'contact number is 0.'
+            ; use fixed wall kn
+            kn(accu) = 10*clumpKn
         else
             loop foreach contact wall.contactmap(w)
                 kn(accu) = kn(accu) + contact.prop(contact, 'kn')
