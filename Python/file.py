@@ -25,6 +25,8 @@ def get_config(fileName: str):
         'dMin'      : float(config.get('clump', 'minSize')),
         'clumpKn'   : float(config.get('clump', 'kn')),
         'clumpFric' : float(config.get('clump', 'fric')),
+        'emod'      : float(config.get('clump', 'emod')),
+        'kratio'    : float(config.get('clump', 'kratio')),
         # output
         'logFile'   : config.get('output', 'logFile'),
         # pfc

@@ -65,6 +65,8 @@ if __name__ == "__main__":
     set('maxAllowedStrain', config['maxStrain'])
     set('wallFric', config['ballWallFric'])
     set('servoFac', config['servoFac'])
+    emod = config['emod']
+    kratio = config['kratio']
 
     log.info("set seed.")
     it.command(f"model random {config['random']}")
@@ -78,7 +80,7 @@ if __name__ == "__main__":
     it.command("model domain condition destroy")
 
     log.info('Preprogress, Set cmat.')
-    it.command("contact cmat default model linear method deformability emod [1.0e9] kratio [2.0]")
+    it.command(f"contact cmat default model linear method deformability emod [{emod}] kratio [{kratio}]")
 
     # ===============================================
 
