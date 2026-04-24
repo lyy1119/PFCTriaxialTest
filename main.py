@@ -67,6 +67,8 @@ if __name__ == "__main__":
     set('servoFac', config['servoFac'])
     emod = config['emod']
     kratio = config['kratio']
+    shearStrength = config['shearStrength']
+    tensileStrength = config['tensileStrength']
 
     log.info("set seed.")
     it.command(f"model random {config['random']}")
@@ -80,7 +82,7 @@ if __name__ == "__main__":
     it.command("model domain condition destroy")
 
     log.info('Preprogress, Set cmat.')
-    it.command(f"contact cmat default model linear method deformability emod [{emod}] kratio [{kratio}]")
+    it.command(f"contact cmat default model linearcbond method deformability emod [{emod}] kratio [{kratio}]  cb_strength shear [{shearStrength}] tensile [{tensileStrength}]")
 
     # ===============================================
 
