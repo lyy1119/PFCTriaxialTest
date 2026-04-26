@@ -67,8 +67,11 @@ if __name__ == "__main__":
     set('servoFac', config['servoFac'])
     emod = config['emod']
     kratio = config['kratio']
-    shearStrength = config['shearStrength']
-    tensileStrength = config['tensileStrength']
+
+    # arrlinear parameter
+    rrFric = config['rollfric']
+    adForce = config['adForce']
+    adRange = config['adRange']
 
     log.info("set seed.")
     it.command(f"model random {config['random']}")
@@ -82,7 +85,8 @@ if __name__ == "__main__":
     it.command("model domain condition destroy")
 
     log.info('Preprogress, Set cmat.')
-    it.command(f"contact cmat default model linearcbond method deformability emod [{emod}] kratio [{kratio}]  cb_strength shear [{shearStrength}] tensile [{tensileStrength}]")
+    it.command('contact cmat default model linear property kn 5e6') # set defualt model linear, pebble-facet
+    it.command(f"contact cmat default type pebble-pebble model arrlinear method deformability emod [{emod}] kratio [{kratio}]  property rr_fric [{rrFric}] adh_f0 [{adForce}] adh_d0 [{adRange}]") # set model, pebble-pebble
 
     # ===============================================
 

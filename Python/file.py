@@ -27,8 +27,11 @@ def get_config(fileName: str):
         'clumpFric' : float(config.get('clump', 'fric')),
         'emod'      : float(config.get('clump', 'emod')),
         'kratio'    : float(config.get('clump', 'kratio')),
-        'shearStrength'     : float(config.get('clump', 'shearStrength')),
-        'tensileStrength'   : float(config.get('clump', 'tensileStrength')),
+        # arrlinear
+        'rollfric'  : float(config.get('clump', 'rollingFric')),
+        'adForce'   : float(config.get('clump', 'adhesiveForce')),
+        'adRange'   : float(config.get('clump', 'adhesiveRange')),
+
         # output
         'logFile'   : config.get('output', 'logFile'),
         # pfc
