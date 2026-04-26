@@ -106,6 +106,7 @@ if __name__ == "__main__":
         read_model("Result/initial-state.sav")
         # recalculate history interval
         interval = int(config['interval']/(it.timestep()*config['loadRate']))
+        log.info(f'History interval is: {interval}')
         set('epsilonRate', config['loadRate'])
         set_history_interval(interval)
 
