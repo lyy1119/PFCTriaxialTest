@@ -1,7 +1,11 @@
 # python 3.6 embedded in PFC6.0
 import configparser as ini
-import itasca as it
+import itasca as it # type: ignore
 import os
+import os
+import glob
+from typing import List
+from .log import Log
 
 run = it.command
 
@@ -82,6 +86,45 @@ def his_to_csv(hisFile: str):
                 o.write(','.join(line.split()) + '\n')
     os.remove(hisFile) # remove hisfile
     os.rename(csvFile, f"Result/{csvFile}")
+
+def batch_delete_files(log: Log, filePatterns: List[str]) -> bool:
+    """
+    Deletes files based on the provided paths or matching patterns.
+    
+    :param filePatterns: A list containing filenames or matching patterns.
+    :return: Whether the overall task was executed successfully.
+    """
+    executionSuccess = True
+
+    if not isinstance(filePatterns, list):
+        log.error("input parameter 'filePatterns' must be a list")
+        return False
+
+    for pattern in filePatterns:
+        try:
+            # Use glob to handle wildcards (e.g., *), recursive=False to maintain simple regex behavior
+            matchedFiles = glob.glob(pattern)
+
+            if not matchedFiles:
+                log.warn(f"no files found matching pattern: {pattern}")
+                continue
+
+            for filePath in matchedFiles:
+                if os.path.isfile(filePath):
+                    try:
+                        os.remove(filePath)
+                        log.succ(f"Deleted file: {filePath}")
+                    except Exception as e:
+                        log.error(f"An error occurred while deleting file: {filePath}, error: {str(e)}")
+                        executionSuccess = False
+                else:
+                    log.info(f"skipping folder: {filePath}")
+
+        except Exception as e:
+            log.fatal(f"An error occurred while processing pattern '{pattern}', error: {str(e)}")
+            executionSuccess = False
+
+    return executionSuccess
 
 if __name__ == "__main__":
     config = get_config("input.ini")

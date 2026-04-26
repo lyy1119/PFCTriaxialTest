@@ -7,7 +7,7 @@
 # Email       : me@lycarus.cn
 # --------------------------------------------
 
-import itasca as it
+import itasca as it # type: ignore
 
 # ===========import custom py file=========
 import importlib
@@ -21,7 +21,7 @@ importlib.reload(Python.file)
 importlib.reload(Python.log)
 importlib.reload(Python.stepTimeRecord)
 
-from Python.file import get_config, his_to_csv
+from Python.file import get_config, his_to_csv, batch_delete_files
 from Python.log import Log
 from Python.stepTimeRecord import StepTime
 # =========================================
@@ -48,8 +48,10 @@ if __name__ == "__main__":
     config = get_config(inputFile)
     logFile = config['logFile']
     log = Log(outputFile=logFile)
+    log.info('Try clean last simulation result file.')
+    batch_delete_files(log, ['Result/*.sav', 'Result/*.csv'])
 
-    log.info(config)
+    log.info(config) # pyright: ignore[reportArgumentType]
 
     # particle size
     set("ball1Radius", config['balls'][0])
@@ -138,7 +140,7 @@ if __name__ == "__main__":
 
     task.finish(taskid)
     log.info("Simulation finished.")
-    log.info(task)
+    log.info(task) # pyright: ignore[reportArgumentType]
 
     # ===============after-processing================
     # ===============================================
