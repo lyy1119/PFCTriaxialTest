@@ -1,4 +1,33 @@
 from datetime import datetime
+from contextlib import contextmanager
+from typing import Generator, Any
+
+@contextmanager
+def task_context(st_instance: Any, log: Any, name: str) -> Generator[int, None, None]:
+    """
+    Context manager compatible with Python 3.6.
+
+    Args:
+        st_instance: Instance of StepTime.
+        log: Instance of Log.
+        name: Task name string.
+    """
+    # Use f-strings (Supported in 3.6+)
+    log.info(f"Start task: {name}")
+
+    # st_instance.start returns an int
+    stepId = st_instance.start(name)
+
+    try:
+        yield stepId
+    finally:
+        # Ensure finish is called even if an exception occurs
+        st_instance.finish(stepId)
+        log.succ(f"Finish task: {name}, time cost: {st_instance.cost_time(stepId)}")
+
+# Standard usage in Python 3.6
+# with task_context(st, logger, "Legacy_Process") as sid:
+#     print(f"Executing step {sid}")
 
 class StepTime():
     def __init__(self):
