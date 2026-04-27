@@ -35,8 +35,10 @@ save_model = lambda file: it.command(f"model save '{file}'")
 read_model = lambda file: it.command(f"model restore '{file}'")
 set_history_interval = lambda i: it.command(f"history interval {i}")
 set = it.fish.set
+pfc = it.command
 
 if __name__ == "__main__":
+    pfc('program echo false') # turn off echo
     task = StepTime()
     taskid = task.start('simulation')
     # it.command("python-reset-state false")
