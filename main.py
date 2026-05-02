@@ -24,6 +24,7 @@ importlib.reload(Python.stepTimeRecord)
 from Python.file import get_config, his_to_csv, batch_delete_files
 from Python.log import Log
 from Python.stepTimeRecord import StepTime, task_context
+import math
 # =========================================
 
 # ==========Settings=========
@@ -35,6 +36,7 @@ save_model = lambda file: it.command(f"model save '{file}'")
 read_model = lambda file: it.command(f"model restore '{file}'")
 set_history_interval = lambda i: it.command(f"history interval {i}")
 set = it.fish.set
+get_fish_var = it.fish.get
 pfc = it.command
 
 if __name__ == "__main__":
@@ -69,6 +71,7 @@ if __name__ == "__main__":
         set('maxAllowedStrain', config['maxStrain'])
         set('wallFric', config['ballWallFric'])
         set('servoFac', config['servoFac'])
+        iNum = config['inertiaNumber']
         emod = config['emod']
         kratio = config['kratio']
 
@@ -105,19 +108,22 @@ if __name__ == "__main__":
 
         for i in range(1,3+1):
             read_model("Result/initial-state.sav")
-            # recalculate history interval
-            interval = int(config['interval']/(it.timestep()*config['loadRate']))
-            log.info(f'History interval is: {interval}')
-            set('epsilonRate', config['loadRate'])
-            set_history_interval(interval)
 
             pressure = float(config[f'confiningPressure{i}'])
-
             set('confiningPressure', pressure)
 
             with task_context(task, log, f'Confining {pressure}Pa'):
                 call_p3dat(f"PFC/confining.p3dat")
                 save_model(f"Result/confining{pressure}.sav")
+
+            call_p3dat("PFC/inspection.p3dat")
+            # recalculate history interval
+            shearSpeed = iNum/((config['dMax'] + config['dMax'])/2)*math.sqrt(pressure/config['density'])
+            set('shearSpeed', shearSpeed)
+            epsilonRate = shearSpeed/get_fish_var("zlength0")
+            interval = int(config['interval']/(it.timestep()*epsilonRate))
+            log.info(f'History interval is: {interval}')
+            set_history_interval(interval)
 
             with task_context(task, log, f"Exert z velocity"):
                 call_p3dat("PFC/triaxialTest.p3dat")

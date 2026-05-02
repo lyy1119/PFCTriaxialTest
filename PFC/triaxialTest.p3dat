@@ -1,15 +1,13 @@
 ; ===========================traxial test=========================
 ; [epsilonRate = ] ; set by python
 
-program call 'PFC/inspection.p3dat'
-
 model calm ; stable all clumps
 [servos('x') = true]
 [servos('y') = true]
 [servos('z') = false]
 
-[wall.vel.z(walls('up'))   = -epsilonRate*zlength/2.0]
-[wall.vel.z(walls('down')) =  epsilonRate*zlength/2.0]
+[wall.vel.z(walls('up'))   = -sheaSpeed/2.0]
+[wall.vel.z(walls('down')) =  sheaSpeed/2.0]
 
 [stop_judgement = 0]
 
