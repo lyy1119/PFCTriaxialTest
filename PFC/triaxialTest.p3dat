@@ -6,8 +6,8 @@ model calm ; stable all clumps
 [servos('y') = true]
 [servos('z') = false]
 
-[wall.vel.z(walls('up'))   = -sheaSpeed/2.0]
-[wall.vel.z(walls('down')) =  sheaSpeed/2.0]
+[wall.vel.z(walls('up'))   = -shearSpeed/2.0]
+[wall.vel.z(walls('down')) =  shearSpeed/2.0]
 
 [stop_judgement = 0]
 
