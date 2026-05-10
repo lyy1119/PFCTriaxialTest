@@ -112,7 +112,6 @@ define init_clumps(extent, clumpName, porosity, dMax, dMin)
             density [density]
 
         clump property              ...
-            "kn"      [clumpKn]     ...
             "fric"    [clumpFric]
 
         wall property "fric" [wallFric]
