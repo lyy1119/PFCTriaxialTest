@@ -31,6 +31,7 @@ def get_config(fileName: str):
         'clumpFric' : float(config.get('clump', 'fric')),
         'emod'      : float(config.get('clump', 'emod')),
         'kratio'    : float(config.get('clump', 'kratio')),
+        'damp'      : float(config.get('clump', 'damp')),
         # arrlinear
         'rollfric'  : float(config.get('clump', 'rollingFric')),
         'adForce'   : float(config.get('clump', 'adhesiveForce')),

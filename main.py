@@ -71,6 +71,7 @@ if __name__ == "__main__":
         set('maxAllowedStrain', config['maxStrain'])
         set('wallFric', config['ballWallFric'])
         set('servoFac', config['servoFac'])
+        set('damp', config['damp'])
         iNum = config['inertiaNumber']
         emod = config['emod']
         kratio = config['kratio']
