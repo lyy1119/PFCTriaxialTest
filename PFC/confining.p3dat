@@ -65,4 +65,6 @@ end
 fish callback add servo_function 1.0
 
 model solve fish-halt @stop_judgement
+
+fish callback remove servo_function 1.0
 ; =================================================================
