@@ -72,6 +72,7 @@ if __name__ == "__main__":
         set('wallFric', config['ballWallFric'])
         set('servoFac', config['servoFac'])
         set('damp', config['damp'])
+        set('consolidationFric', config['consolidationFric'])
         iNum = config['inertiaNumber']
         emod = config['emod']
         kratio = config['kratio']
