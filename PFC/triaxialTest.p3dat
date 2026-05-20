@@ -19,7 +19,7 @@ fish define stop_judgement
     else if zStress >= stressMax then
         stressMax = zStress
         strainAtMax = zEpsilon ; re-record max stress and strain, there, strain is a negative real number
-    else if (stressMax - zStress)/stressMax >= 0.1 & zEpsilon - strainAtMax > 4 then
+    else if (stressMax - zStress)/stressMax >= 0.1 & strainAtMax - zEpsilon > 0.05 then
         stop_judgement = 1 ; exit condition 2, where there is a peak value in stress
     else
         stop_judgement = 0
