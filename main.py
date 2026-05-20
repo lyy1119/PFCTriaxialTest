@@ -127,7 +127,7 @@ if __name__ == "__main__":
             set_history_interval(interval)
 
             with task_context(task, log, f"Exert z velocity"):
-                pfc(f'clump property "fric" {config['clumpFric']}') # give clumps target fric
+                pfc(f'clump property "fric" {config["clumpFric"]}') # give clumps target fric
                 # resign cmat
                 it.command('contact cmat default model linear property kn 5e6') # set defualt model linear, pebble-facet
                 it.command(f"contact cmat default type pebble-pebble model arrlinear method deformability emod [{emod}] kratio [{kratio}]  property rr_fric [{rrFric}] adh_f0 [{adForce}] adh_d0 [{adRange}]") # set model, pebble-pebble
