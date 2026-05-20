@@ -62,9 +62,8 @@ fish define stop_judgement
 end
 
 ; step 1, confining
+fish callback remove servo_function 1.0
 fish callback add servo_function 1.0
 
 model solve fish-halt @stop_judgement
-
-fish callback remove servo_function 1.0
 ; =================================================================
