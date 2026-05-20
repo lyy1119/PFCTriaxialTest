@@ -115,6 +115,12 @@ if __name__ == "__main__":
 
             with task_context(task, log, f'Confining {pressure}Pa'):
                 call_p3dat(f"PFC/confining.p3dat")
+                # resign cmat
+                pfc(f'clump property "fric" {config["clumpFric"]}') # give clumps target fric
+                it.command('contact cmat default model linear property kn 5e6') # set defualt model linear, pebble-facet
+                it.command(f"contact cmat default type pebble-pebble model arrlinear method deformability emod [{emod}] kratio [{kratio}]  property rr_fric [{rrFric}] adh_f0 [{adForce}] adh_d0 [{adRange}]") # set model, pebble-pebble
+                pfc("contact cmat apply")
+                call_p3dat(f"PFC/confining.p3dat")
                 save_model(f"Result/confining{pressure}.sav")
 
             call_p3dat("PFC/inspection.p3dat")
@@ -127,11 +133,6 @@ if __name__ == "__main__":
             set_history_interval(interval)
 
             with task_context(task, log, f"Exert z velocity"):
-                pfc(f'clump property "fric" {config["clumpFric"]}') # give clumps target fric
-                # resign cmat
-                it.command('contact cmat default model linear property kn 5e6') # set defualt model linear, pebble-facet
-                it.command(f"contact cmat default type pebble-pebble model arrlinear method deformability emod [{emod}] kratio [{kratio}]  property rr_fric [{rrFric}] adh_f0 [{adForce}] adh_d0 [{adRange}]") # set model, pebble-pebble
-                pfc("contact cmat apply")
                 call_p3dat("PFC/triaxialTest.p3dat")
                 save_model(f"Result/triaxial{pressure}.sav")
 
