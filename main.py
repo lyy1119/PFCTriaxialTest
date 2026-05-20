@@ -127,6 +127,7 @@ if __name__ == "__main__":
             set_history_interval(interval)
 
             with task_context(task, log, f"Exert z velocity"):
+                pfc(f'clump property "fric" {config['clumpFric']}') # give clumps target fric
                 call_p3dat("PFC/triaxialTest.p3dat")
                 save_model(f"Result/triaxial{pressure}.sav")
 

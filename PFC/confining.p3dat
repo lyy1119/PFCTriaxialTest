@@ -7,7 +7,7 @@
 [targetStress      = map()]
 [targetStress('x') = confiningPressure]
 [targetStress('y') = confiningPressure]
-[targetStress('z') = confiningPressure] 
+[targetStress('z') = confiningPressure]
 
 [servos      = map()]
 [servos('x') = true]
