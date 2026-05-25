@@ -42,7 +42,7 @@ end
 [record = 0]
 
 fish define stop_judgement
-    if record*recordInterval <= mech.step then
+    if record*recordInterval < mech.step then
         saveString = pfcStartTime + '-confining-' + string(currentTest) + '-record-' + record + '.sav'
         record = record + 1
         command
