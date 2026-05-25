@@ -47,6 +47,15 @@ if __name__ == "__main__":
     it.command("model title 'Triaxial Test'")
 
     # ===============pre-processing==================
+    from datetime import datetime
+
+    # 获取当前时间
+    now = datetime.now()
+
+    # 格式化为 yyyy-mm-dd-hh 字符串
+    timeStr = now.strftime('%Y-%m-%d-%H')
+    set('pfcStartTime', timeStr)
+
     # read & load parameters from file
     config = get_config(inputFile)
     logFile = config['logFile']
@@ -111,6 +120,8 @@ if __name__ == "__main__":
         for i in range(1,3+1):
             read_model("Result/initial-state.sav")
 
+            set('currentTest', f'{pressure}')
+
             pressure = float(config[f'confiningPressure{i}'])
             set('confiningPressure', pressure)
 
@@ -131,6 +142,7 @@ if __name__ == "__main__":
             epsilonRate = shearSpeed/get_fish_var("zlength0")
             interval = int(config['interval']/(it.timestep()*epsilonRate))
             log.info(f'History interval is: {interval}')
+            set('saveInterval', interval)
             set_history_interval(interval)
 
             with task_context(task, log, f"Exert z velocity"):

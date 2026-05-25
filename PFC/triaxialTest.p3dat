@@ -13,7 +13,18 @@ model calm ; stable all clumps
 
 [strainAtMax = zEpsilon] ; record strain where max stress appears
 [stressMax = zStress] ; depand on inspection.p3dat
+
+[record = 0]
+
 fish define stop_judgement
+    if record*saveInterval <= mech.step then
+        saveString = pfcStartTime + '-traxial-' + currentTest + '-record-' + record + '.sav'
+        record = record + 1
+        command
+            model save [saveString]
+        endcommand
+    endif
+
     if zEpsilon <= -maxAllowedStrain then ; variable zEpsilon relay on 'inspection.p3dat'
         stop_judgement = 1 ; exit condition 1, reach desinged max strain
     else if zStress >= stressMax then
