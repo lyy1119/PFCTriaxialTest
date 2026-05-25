@@ -121,7 +121,7 @@ if __name__ == "__main__":
             read_model("Result/initial-state.sav")
 
             pressure = float(config[f'confiningPressure{i}'])
-            set('currentTest', f'{pressure}')
+            set('currentTest', pressure)
             set('confiningPressure', pressure)
 
             with task_context(task, log, f'Confining {pressure}Pa'):
